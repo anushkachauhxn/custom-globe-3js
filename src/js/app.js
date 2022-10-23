@@ -1,4 +1,5 @@
 import * as THREE from "three";
+import globeTexture from "../assets/globe.jpg";
 
 // Renderer
 const renderer = new THREE.WebGLRenderer();
@@ -22,7 +23,9 @@ const loader = new THREE.TextureLoader();
 // Add Objects
 // 1. Sphere
 const sphereGeo = new THREE.SphereGeometry(5, 50, 50);
-const sphereMat = new THREE.MeshBasicMaterial({ color: 0xff0000 });
+const sphereMat = new THREE.MeshBasicMaterial({
+  map: loader.load(globeTexture),
+});
 const sphere = new THREE.Mesh(sphereGeo, sphereMat);
 scene.add(sphere);
 
