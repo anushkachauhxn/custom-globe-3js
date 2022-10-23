@@ -1,6 +1,7 @@
 import * as THREE from "three";
 import vertexShader from "./shaders/vertex.glsl";
 import fragmentShader from "./shaders/fragment.glsl";
+import globeTexture from "../assets/globe.jpg";
 
 // Renderer
 const renderer = new THREE.WebGLRenderer({
@@ -29,6 +30,9 @@ const sphereGeo = new THREE.SphereGeometry(5, 50, 50);
 const sphereMat = new THREE.ShaderMaterial({
   vertexShader: vertexShader,
   fragmentShader: fragmentShader,
+  uniforms: {
+    globeTexture: { value: loader.load(globeTexture) },
+  },
 });
 const sphere = new THREE.Mesh(sphereGeo, sphereMat);
 scene.add(sphere);
