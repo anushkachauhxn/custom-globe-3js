@@ -37,7 +37,11 @@ const sphereMat = new THREE.ShaderMaterial({
   },
 });
 const sphere = new THREE.Mesh(sphereGeo, sphereMat);
-scene.add(sphere);
+
+// Group
+const group = new THREE.Group();
+group.add(sphere);
+scene.add(group);
 
 // 2. Atmosphere = Another sphere slightly bigger than the globe
 const atmosphereGeo = new THREE.SphereGeometry(5, 50, 50);
@@ -65,7 +69,11 @@ window.addEventListener("mousemove", (event) => {
 
 // Animate
 (function animate() {
+  // Primary Spin Effect: simple rotation
   sphere.rotation.y += 0.001;
+  // Secondary Spin Effect: from mouse movement
+  group.rotation.y = mouse.x * 0.5;
+
   requestAnimationFrame(animate);
   renderer.render(scene, camera);
 })();
