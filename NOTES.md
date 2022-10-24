@@ -182,3 +182,27 @@ const atmosphereMat = new THREE.ShaderMaterial({
   side: THREE.BackSide,
 });
 ```
+
+## 🦠 Bug Fix: Shader Normal
+
+<img height="148px" src="https://user-images.githubusercontent.com/59930625/197463795-1eb5f2ad-69eb-4464-a0d9-f57879ebd4d7.png">
+
+- Problem: Backside is way more lit. Uneven coloring from fragment shader.
+- Solution: **The vertexNormal should be _normalized_.**
+- Background:
+  - The attributes passed through three.js need to make sure they are translated correctly onto a 2D screen from a 3D space.
+  - We need to make sure our normals are pointing in the right direction _within our 2D screen_ even though they're being passed from a 3D world.
+
+_vertex.glsl + atmosphereVertex.glsl_
+
+change
+
+```
+vertexNormal =  normal;
+```
+
+to
+
+```
+vertexNormal = normalize(normalMatrix * normal);
+```
