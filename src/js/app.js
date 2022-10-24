@@ -1,4 +1,5 @@
 import * as THREE from "three";
+import gsap from "gsap";
 import vertexShader from "./shaders/vertex.glsl";
 import fragmentShader from "./shaders/fragment.glsl";
 import atmosphereVertexShader from "./shaders/atmosphereVertex.glsl";
@@ -70,9 +71,15 @@ window.addEventListener("mousemove", (event) => {
 // Animate
 (function animate() {
   // Primary Spin Effect: simple rotation
-  sphere.rotation.y += 0.001;
+  sphere.rotation.y += 0.003;
+
   // Secondary Spin Effect: from mouse movement
-  group.rotation.y = mouse.x * 0.5;
+  // group.rotation.y = mouse.x * 0.5;
+  gsap.to(group.rotation, {
+    duration: 2,
+    x: -mouse.y * 0.3,
+    y: mouse.x * 0.5,
+  });
 
   requestAnimationFrame(animate);
   renderer.render(scene, camera);
