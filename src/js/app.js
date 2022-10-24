@@ -51,6 +51,18 @@ const atmosphere = new THREE.Mesh(atmosphereGeo, atmosphereMat);
 atmosphere.scale.set(1.1, 1.1, 1.1);
 scene.add(atmosphere);
 
+// Mouse Coordinates - (Normalized)
+const mouse = {
+  x: undefined,
+  y: undefined,
+};
+
+window.addEventListener("mousemove", (event) => {
+  mouse.x = (event.clientX / innerWidth) * 2 - 1;
+  mouse.y = -(event.clientY / innerHeight) * 2 + 1;
+  console.log(mouse);
+});
+
 // Animate
 (function animate() {
   sphere.rotation.y += 0.001;
