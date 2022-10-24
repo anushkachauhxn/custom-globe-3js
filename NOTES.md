@@ -92,3 +92,49 @@ void main() {
     gl_FragColor = texture2D(globeTexture, vertexUV);
 }
 ```
+
+## ☀️ Adding an Atmospheric/ Glow Effect on a geometry
+
+### 1. Getting the normal value from vertex shader to fragment shader:
+
+#### What is a normal?
+
+- A normal is data that represents the direction a vertex is facing.
+- Eg: [1, 0, 0] means the vertex is pointing to the right.
+
+> Different kinds of vertex data:
+>
+> - 📍 position (where on the screen it is)
+> - ↘️ normal (direction it is facing)
+> - 🗺️ uv (position if unwrapped onto a 2D surface)
+
+<hr>
+
+_vertex.glsl_
+
+```
+varying vec3 vertexNormal;
+
+void main() {
+    vertexNormal = normal;
+}
+```
+
+_fragment.glsl_
+
+```
+varying vec3 vertexNormal;
+```
+
+## 2. Calculating and adding the `atmoshpere` value to fragment shader
+
+_fragment.glsl_
+
+```
+void main() {
+    float intensity = 1.05 - dot(vertexNormal, vec3(0.0, 0.0, 1.0)); // different for each vertex => gives the edge effect
+    vec3 atmosphere = vec3(0.3, 0.6, 1.0) * pow(intensity, 1.5);
+
+    gl_FragColor = vec4(atmosphere + texture2D(globeTexture, vertexUV).xyz, 1.0);
+}
+```
