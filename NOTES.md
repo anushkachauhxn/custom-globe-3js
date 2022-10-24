@@ -93,7 +93,7 @@ void main() {
 }
 ```
 
-## ☀️ Adding an Atmospheric/ Glow Effect on a geometry
+## 🌍 Adding an Atmospheric Effect on a geometry
 
 ### 1. Getting the normal value from vertex shader to fragment shader:
 
@@ -137,4 +137,48 @@ void main() {
 
     gl_FragColor = vec4(atmosphere + texture2D(globeTexture, vertexUV).xyz, 1.0);
 }
+```
+
+## ☀️ Adding a Glow Effect on a geometry
+
+### 1. Create another mesh slightly larger than the main globe
+
+_app.js_
+
+```js
+atmosphere.scale.set(1.1, 1.1, 1.1);
+```
+
+_atmosphereVertex.glsl_
+
+```
+void main() {
+    gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 0.9 );
+}
+```
+
+### 2. Create a fragment shader that creates an uneven color effect
+
+- Glow: starts out strong in the middle and then fades out at the edges
+
+_atmosphereFragment.glsl_
+
+```
+void main() {
+    float intensity = pow(0.65 - dot(vertexNormal, vec3(0.0, 0.0, 1.0)), 2.0);
+    gl_FragColor = vec4(0.3, 0.6, 1.0, 1.0) * intensity;
+}
+```
+
+### 3. Make the shader blend with the globe
+
+_app.js_
+
+```js
+const atmosphereMat = new THREE.ShaderMaterial({
+  vertexShader: atmosphereVertexShader,
+  fragmentShader: atmosphereFragmentShader,
+  blending: THREE.AdditiveBlending,
+  side: THREE.BackSide,
+});
 ```
