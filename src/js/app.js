@@ -6,19 +6,23 @@ import atmosphereVertexShader from "./shaders/atmosphereVertex.glsl";
 import atmosphereFragmentShader from "./shaders/atmosphereFragment.glsl";
 import globeTexture from "../assets/globe.jpg";
 
+// Constants
+const canvas = document.querySelector(".container canvas"),
+  canvasContainer = document.querySelector(".container");
+
 // Renderer
 const renderer = new THREE.WebGLRenderer({
+  canvas: canvas,
   antialias: true,
 });
-renderer.setSize(innerWidth, innerHeight);
+renderer.setSize(canvasContainer.offsetWidth, canvasContainer.offsetHeight);
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-document.body.appendChild(renderer.domElement);
 
 // Scene + Camera
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(
   75,
-  innerWidth / innerHeight,
+  canvasContainer.offsetWidth / canvasContainer.offsetHeight,
   0.1,
   1000
 );
@@ -77,8 +81,8 @@ starGeo.setAttribute(
 
 // Mouse Coordinates - (Normalized)
 const mouse = {
-  x: undefined,
-  y: undefined,
+  x: 0,
+  y: 0,
 };
 
 window.addEventListener("mousemove", (event) => {
@@ -92,13 +96,20 @@ window.addEventListener("mousemove", (event) => {
   sphere.rotation.y += 0.003;
 
   // Secondary Spin Effect: from mouse movement
-  // group.rotation.y = mouse.x * 0.5;
   gsap.to(group.rotation, {
     duration: 2,
-    x: -mouse.y * 0.3,
-    y: mouse.x * 0.5,
+    x: -mouse.y * 0.2,
+    y: mouse.x * 0.4,
   });
 
   requestAnimationFrame(animate);
   renderer.render(scene, camera);
 })();
+
+// Responsive Window
+window.addEventListener("resize", () => {
+  camera.aspect = canvasContainer.offsetWidth / canvasContainer.offsetHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(canvasContainer.offsetWidth, canvasContainer.offsetHeight);
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+});
