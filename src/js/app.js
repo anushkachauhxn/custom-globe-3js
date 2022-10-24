@@ -53,6 +53,7 @@ scene.add(atmosphere);
 
 // Animate
 (function animate() {
+  sphere.rotation.y += 0.001;
   requestAnimationFrame(animate);
   renderer.render(scene, camera);
 })();
