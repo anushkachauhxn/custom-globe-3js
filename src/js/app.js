@@ -56,6 +56,25 @@ const atmosphere = new THREE.Mesh(atmosphereGeo, atmosphereMat);
 atmosphere.scale.set(1.1, 1.1, 1.1);
 scene.add(atmosphere);
 
+// 3. Stars
+const starGeo = new THREE.BufferGeometry();
+const starMat = new THREE.PointsMaterial({ color: 0xffffff });
+const stars = new THREE.Points(starGeo, starMat);
+scene.add(stars);
+
+const starCount = 10000;
+const starVertices = [];
+for (let i = 0; i < starCount; i++) {
+  const x = (Math.random() - 0.5) * 3000;
+  const y = (Math.random() - 0.5) * 3000;
+  const z = -Math.random() * 3000;
+  starVertices.push(x, y, z);
+}
+starGeo.setAttribute(
+  "position",
+  new THREE.Float32BufferAttribute(starVertices, 3)
+);
+
 // Mouse Coordinates - (Normalized)
 const mouse = {
   x: undefined,
@@ -65,7 +84,6 @@ const mouse = {
 window.addEventListener("mousemove", (event) => {
   mouse.x = (event.clientX / innerWidth) * 2 - 1;
   mouse.y = -(event.clientY / innerHeight) * 2 + 1;
-  console.log(mouse);
 });
 
 // Animate
